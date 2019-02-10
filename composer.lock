@@ -1,0 +1,70 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "aeefb30af21bab36892e4b5967fce214",
+    "packages": [
+        {
+            "name": "php/phd",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php/phd.git",
+                "reference": "b2a1cc305049166d6878cae9b739ec432c452c7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php/phd/zipball/b2a1cc305049166d6878cae9b739ec432c452c7f",
+                "reference": "b2a1cc305049166d6878cae9b739ec432c452c7f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-sqlite3": "*",
+                "ext-xmlreader": "*",
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "easybook/geshi": "For using GeSHi as code highlighter"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-0": {
+                    "phpdotnet\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hannes Magnusson",
+                    "email": "bjori@php.net",
+                    "homepage": "http://people.php.net/bjori",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "The PHP Documentation Team",
+                    "email": "phpdoc@lists.php.net",
+                    "homepage": "https://github.com/php/phd/graphs/contributors"
+                }
+            ],
+            "description": "PHP DocBook Rendering System",
+            "homepage": "http://doc.php.net/phd.php",
+            "time": "2017-08-17T09:59:19+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "php/phd": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

@@ -1,0 +1,11 @@
+{
+    "name": "mattacosta/phd",
+    "description": "Base types for generating PHP documentation.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": { "mattacosta\\phd\\": "src" }
+    },
+    "require": {
+        "php/phd": "@dev"
+    }
+}
