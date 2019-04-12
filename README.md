@@ -10,6 +10,10 @@ Base types for generating PHP documentation.
 
 ## Installation
 
+1. Add `mattacosta/phd` to your `composer.json` file.
+
+## Getting started
+
 1. Get a copy of the PHP manual.
 
    `svn checkout https://svn.php.net/repository/phpdoc/modules/doc-en ./phpdoc-en`
@@ -18,15 +22,11 @@ Base types for generating PHP documentation.
 
    `php phpdoc-en/doc-base/configure.php`
 
-3. Install dependencies.
-
-   `composer install`
-
-## Getting started
-
-1. Create a class that extends `Package_IDE_Base` and implement a rendering
+3. Create a class that extends `Package_IDE_Base` and implements a rendering
    function.
 
-2. Add it to `export.php` and run the script.
+4. Create a script to setup and run the renderer (PEAR usage is unsupported).
 
-   `php src/export.php phpdoc-en/doc-base/.manual.xml`
+   You can copy the `scripts/export.php` file as a basic starting point.
+
+   Usage: `php scripts/export.php phpdoc-en/doc-base/.manual.xml`
