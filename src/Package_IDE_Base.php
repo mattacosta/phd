@@ -2,11 +2,11 @@
 
 namespace mattacosta\phd;
 
+use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\ReaderKeeper;
 use phpdotnet\phd\Render;
-use phpdotnet\phd\Config;
 
 abstract class Package_IDE_Base extends Format {
 
