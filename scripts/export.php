@@ -2,9 +2,9 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use \phpdotnet\phd\Config;
-use \phpdotnet\phd\Reader;
-use \phpdotnet\phd\Render;
+use phpdotnet\phd\Config;
+use phpdotnet\phd\Reader;
+use phpdotnet\phd\Render;
 
 // If you change the `output_dir` setting, don't forget the trailing '/'.
 Config::init([]);
