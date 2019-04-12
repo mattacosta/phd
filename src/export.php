@@ -1,7 +1,5 @@
 <?php
 
-namespace mattacosta\phd;
-
 require __DIR__ . '/../vendor/autoload.php';
 
 use \phpdotnet\phd\Config;
