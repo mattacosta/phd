@@ -3,7 +3,10 @@
     "description": "Base types for generating PHP documentation.",
     "license": "MIT",
     "autoload": {
-        "psr-4": { "mattacosta\\phd\\": "src" }
+        "psr-4": { "mattacosta\\phd\\": "src" },
+        "files": [
+            "vendor/php/phd/phpdotnet/phd/functions.php"
+        ]
     },
     "require": {
         "php/phd": "@dev"

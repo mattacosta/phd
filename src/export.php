@@ -3,7 +3,6 @@
 namespace mattacosta\phd;
 
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../vendor/php/phd/phpdotnet/phd/functions.php';
 
 use \phpdotnet\phd\Config;
 use \phpdotnet\phd\Reader;
