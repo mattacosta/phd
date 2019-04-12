@@ -1,5 +1,5 @@
 {
-    "name": "mattacosta/phd",
+    "name": "mattacosta/phd-common",
     "description": "Base types for generating PHP documentation.",
     "license": "MIT",
     "autoload": {

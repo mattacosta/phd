@@ -1,4 +1,4 @@
-# phd
+# phd-common
 
 Base types for generating PHP documentation.
 
@@ -10,7 +10,7 @@ Base types for generating PHP documentation.
 
 ## Installation
 
-1. Add `mattacosta/phd` to your `composer.json` file.
+1. Add `mattacosta/phd-common` to your `composer.json` file.
 
 ## Getting started
 
