@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aeefb30af21bab36892e4b5967fce214",
+    "content-hash": "f652d660f7f5fd9d160825493875326b",
     "packages": [
         {
             "name": "php/phd",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php/phd.git",
-                "reference": "b2a1cc305049166d6878cae9b739ec432c452c7f"
+                "reference": "785fec0bd5d88819bbf1dc4b6f9a3be64bd99cea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php/phd/zipball/b2a1cc305049166d6878cae9b739ec432c452c7f",
-                "reference": "b2a1cc305049166d6878cae9b739ec432c452c7f",
+                "url": "https://api.github.com/repos/php/phd/zipball/785fec0bd5d88819bbf1dc4b6f9a3be64bd99cea",
+                "reference": "785fec0bd5d88819bbf1dc4b6f9a3be64bd99cea",
                 "shasum": ""
             },
             "require": {
@@ -29,6 +29,7 @@
             "suggest": {
                 "easybook/geshi": "For using GeSHi as code highlighter"
             },
+            "default-branch": true,
             "type": "project",
             "autoload": {
                 "psr-0": {
@@ -54,7 +55,11 @@
             ],
             "description": "PHP DocBook Rendering System",
             "homepage": "http://doc.php.net/phd.php",
-            "time": "2017-08-17T09:59:19+00:00"
+            "support": {
+                "issues": "https://github.com/php/phd/issues",
+                "source": "https://github.com/php/phd/tree/master"
+            },
+            "time": "2021-01-04T11:48:44+00:00"
         }
     ],
     "packages-dev": [],
@@ -66,5 +71,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }
