@@ -19,24 +19,25 @@ abstract class Package_IDE_Base extends Format {
    * NOTE: The renderer assumes that these methods begin with `format_`.
    */
   protected const ELEMENT_MAP = [
-    'book'        => 'format_Book',
-    'caution'     => 'format_Notes',
-    'entry'       => 'format_ChangeLogEntry',
-    'function'    => 'format_SeeAlsoEntry',
-    'listitem'    => 'format_ParameterDescription',
-    'methodparam' => 'format_MethodParameter',
-    'methodname'  => 'format_SeeAlsoEntry',
-    'member'      => 'format_Member',
-    'note'        => 'format_Notes',
-    'refentry'    => 'format_RefEntry',
-    'refpurpose'  => 'format_RefPurpose',
-    'refnamediv'  => 'format_SuppressedTags',
-    'refsect1'    => 'format_RefSect1',
-    'row'         => 'format_ChangeLogRow',
-    'set'         => 'format_Set',
-    'tbody'       => 'format_ChangeLogTbody',
-    'tip'         => 'format_Notes',
-    'warning'     => 'format_Notes',
+    'book'           => 'format_Book',
+    'caution'        => 'format_Notes',
+    'entry'          => 'format_ChangeLogEntry',
+    'function'       => 'format_SeeAlsoEntry',
+    'listitem'       => 'format_ParameterDescription',
+    'member'         => 'format_Member',
+    'methodname'     => 'format_SeeAlsoEntry',
+    'methodparam'    => 'format_MethodParameter',
+    'methodsynopsis' => 'format_MethodSynopsis',
+    'note'           => 'format_Notes',
+    'refentry'       => 'format_RefEntry',
+    'refnamediv'     => 'format_SuppressedTags',
+    'refpurpose'     => 'format_RefPurpose',
+    'refsect1'       => 'format_RefSect1',
+    'row'            => 'format_ChangeLogRow',
+    'set'            => 'format_Set',
+    'tbody'          => 'format_ChangeLogTbody',
+    'tip'            => 'format_Notes',
+    'warning'        => 'format_Notes',
   ];
 
   /**
@@ -85,9 +86,10 @@ abstract class Package_IDE_Base extends Format {
   protected $currentChunk = [
     'funcnames' => [],
     'methodparam'   => FALSE,
+    'is_methodsynopsis' => FALSE,
     'param' => [
       'name'        => FALSE,
-      'type'        => FALSE,
+      'type'        => [],
       'description' => FALSE,
       'opt'         => FALSE,
       'initializer' => FALSE,
@@ -102,7 +104,7 @@ abstract class Package_IDE_Base extends Format {
     'description'   => NULL,
     'params'        => [],
     'return' => [
-      'type'        => NULL,
+      'type'        => [],
       'description' => NULL
     ]
   ];
@@ -319,12 +321,19 @@ abstract class Package_IDE_Base extends Format {
       $this->currentChunk['methodparam'] = FALSE;
       $this->currentChunk['param'] = [
         'name'        => FALSE,
-        'type'        => FALSE,
+        'type'        => [],
         'description' => FALSE,
         'opt'         => FALSE,
         'initializer' => FALSE,
       ];
     }
+  }
+
+  public function format_MethodSynopsis($open, $name, $attrs, $props) {
+    if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
+      return;
+    }
+    $this->currentChunk['is_methodsynopsis'] = $open;
   }
 
   public function format_Notes($open, $name, $attrs, $props) {
@@ -344,9 +353,10 @@ abstract class Package_IDE_Base extends Format {
       $this->currentChunk = [
         'funcnames' => [],
         'methodparam'   => FALSE,
+        'is_methodsynopsis' => FALSE,
         'param' => [
           'name'        => FALSE,
-          'type'        => FALSE,
+          'type'        => [],
           'description' => FALSE,
           'opt'         => FALSE,
           'initializer' => FALSE,
@@ -357,7 +367,7 @@ abstract class Package_IDE_Base extends Format {
         'description'   => NULL,
         'params'        => [],
         'return' => [
-          'type'        => NULL,
+          'type'        => [],
           'description' => NULL
         ]
       ];
@@ -458,11 +468,14 @@ abstract class Package_IDE_Base extends Format {
       return;
     }
     if ($this->role == 'description') {
+      if (!$this->currentChunk['is_methodsynopsis']) {
+        return;
+      }
       if (!$this->currentChunk['methodparam']) {
-        $this->currentFunction['return']['type'] = $value;
+        $this->currentFunction['return']['type'][] = $value;
       }
       else {
-        $this->currentChunk['param']['type'] = $value;
+        $this->currentChunk['param']['type'][] = $value;
       }
     }
   }
