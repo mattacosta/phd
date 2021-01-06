@@ -6,7 +6,6 @@ Base types for generating PHP documentation.
 
 - [PHP 7](https://secure.php.net/)
 - [Composer](https://getcomposer.org/)
-- SVN
 
 ## Installation
 
@@ -16,11 +15,13 @@ Base types for generating PHP documentation.
 
 1. Get a copy of the PHP manual.
 
-   `svn checkout https://svn.php.net/repository/phpdoc/modules/doc-en ./phpdoc-en`
+   `git clone https://github.com/php/doc-base.git phpdoc/doc-base`
+
+   `git clone https://github.com/php/doc-en.git phpdoc/en`
 
 2. Generate a `.manual.xml` file.
 
-   `php phpdoc-en/doc-base/configure.php`
+   `php phpdoc/doc-base/configure.php`
 
 3. Create a class that extends `Package_IDE_Base` and implements a rendering
    function.
@@ -29,4 +30,4 @@ Base types for generating PHP documentation.
 
    You can copy the `scripts/export.php` file as a basic starting point.
 
-   Usage: `php scripts/export.php phpdoc-en/doc-base/.manual.xml`
+   Usage: `php scripts/export.php phpdoc/doc-base/.manual.xml`
