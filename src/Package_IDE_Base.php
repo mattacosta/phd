@@ -341,7 +341,7 @@ abstract class Package_IDE_Base extends Format {
   }
 
   public function format_MethodSynopsis($open, $name, $attrs, $props) {
-    if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
+    if (!$this->isFunctionRefSet || !$this->isWhitelisted || $this->role != 'description') {
       return;
     }
     $this->currentChunk['is_methodsynopsis'] = $open;
