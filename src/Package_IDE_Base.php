@@ -85,13 +85,13 @@ abstract class Package_IDE_Base extends Format {
    */
   protected $currentChunk = [
     'funcnames' => [],
-    'methodparam'   => FALSE,
+    'is_methodparam'   => FALSE,
     'is_methodsynopsis' => FALSE,
     'param' => [
       'name'        => FALSE,
       'type'        => [],
       'description' => FALSE,
-      'opt'         => FALSE,
+      'optional'    => FALSE,
       'initializer' => FALSE,
     ]
   ];
@@ -296,13 +296,13 @@ abstract class Package_IDE_Base extends Format {
     }
     if ($open) {
       // Indicate that future initializers belong to this parameter.
-      $this->currentChunk['methodparam'] = TRUE;
+      $this->currentChunk['is_methodparam'] = TRUE;
 
       if (isset($attrs[Reader::XMLNS_DOCBOOK]['choice']) && $attrs[Reader::XMLNS_DOCBOOK]['choice'] == 'opt') {
-        $this->currentChunk['param']['opt'] = TRUE;
+        $this->currentChunk['param']['optional'] = TRUE;
       }
       else {
-        $this->currentChunk['param']['opt'] = FALSE;
+        $this->currentChunk['param']['optional'] = FALSE;
       }
     }
     else {
@@ -310,7 +310,7 @@ abstract class Package_IDE_Base extends Format {
       $param = [
         'name' => $this->currentChunk['param']['name'],
         'type' => $this->currentChunk['param']['type'],
-        'optional' => $this->currentChunk['param']['opt'],
+        'optional' => $this->currentChunk['param']['optional'],
         'initializer' => $this->currentChunk['param']['initializer'] !== FALSE
           ? $this->currentChunk['param']['initializer']
           : FALSE,
@@ -318,12 +318,12 @@ abstract class Package_IDE_Base extends Format {
       $this->currentFunction['params'][$param['name']] = $param;
 
       // Reset.
-      $this->currentChunk['methodparam'] = FALSE;
+      $this->currentChunk['is_methodparam'] = FALSE;
       $this->currentChunk['param'] = [
         'name'        => FALSE,
         'type'        => [],
         'description' => FALSE,
-        'opt'         => FALSE,
+        'optional'    => FALSE,
         'initializer' => FALSE,
       ];
     }
@@ -352,13 +352,13 @@ abstract class Package_IDE_Base extends Format {
       // Reset all stored data.
       $this->currentChunk = [
         'funcnames' => [],
-        'methodparam'   => FALSE,
+        'is_methodparam'   => FALSE,
         'is_methodsynopsis' => FALSE,
         'param' => [
           'name'        => FALSE,
           'type'        => [],
           'description' => FALSE,
-          'opt'         => FALSE,
+          'optional'    => FALSE,
           'initializer' => FALSE,
         ]
       ];
@@ -430,7 +430,7 @@ abstract class Package_IDE_Base extends Format {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
       return;
     }
-    if (!$this->currentChunk['methodparam']) {
+    if (!$this->currentChunk['is_methodparam']) {
       return;
     }
     $this->currentChunk['param']['initializer'] = $value;
@@ -440,7 +440,7 @@ abstract class Package_IDE_Base extends Format {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
       return;
     }
-    if ($this->currentChunk['methodparam']) {
+    if ($this->currentChunk['is_methodparam']) {
       $this->currentChunk['param']['name'] = $value;
     }
     // if ($this->role == 'parameters') {
@@ -471,7 +471,7 @@ abstract class Package_IDE_Base extends Format {
       if (!$this->currentChunk['is_methodsynopsis']) {
         return;
       }
-      if (!$this->currentChunk['methodparam']) {
+      if (!$this->currentChunk['is_methodparam']) {
         $this->currentFunction['return']['type'][] = $value;
       }
       else {
