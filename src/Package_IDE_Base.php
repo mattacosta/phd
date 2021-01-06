@@ -93,6 +93,7 @@ abstract class Package_IDE_Base extends Format {
       'description' => FALSE,
       'optional'    => FALSE,
       'initializer' => FALSE,
+      'variadic'    => FALSE,
     ]
   ];
 
@@ -304,6 +305,13 @@ abstract class Package_IDE_Base extends Format {
       else {
         $this->currentChunk['param']['optional'] = FALSE;
       }
+
+      if (isset($attrs[Reader::XMLNS_DOCBOOK]['rep']) && $attrs[Reader::XMLNS_DOCBOOK]['rep'] == 'repeat') {
+        $this->currentChunk['param']['variadic'] = TRUE;
+      }
+      else {
+        $this->currentChunk['param']['variadic'] = FALSE;
+      }
     }
     else {
       // Compile the collected data into a usable parameter.
@@ -314,6 +322,7 @@ abstract class Package_IDE_Base extends Format {
         'initializer' => $this->currentChunk['param']['initializer'] !== FALSE
           ? $this->currentChunk['param']['initializer']
           : FALSE,
+        'variadic' => $this->currentChunk['param']['variadic'],
       ];
       $this->currentFunction['params'][$param['name']] = $param;
 
@@ -325,6 +334,7 @@ abstract class Package_IDE_Base extends Format {
         'description' => FALSE,
         'optional'    => FALSE,
         'initializer' => FALSE,
+        'variadic'    => FALSE,
       ];
     }
   }
@@ -360,6 +370,7 @@ abstract class Package_IDE_Base extends Format {
           'description' => FALSE,
           'optional'    => FALSE,
           'initializer' => FALSE,
+          'variadic'    => FALSE,
         ]
       ];
       $this->currentFunction = [
