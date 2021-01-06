@@ -44,6 +44,7 @@ abstract class Package_IDE_Base extends Format {
    * Maps the text content of an XML element to a format method.
    */
   protected const TEXT_MAP = [
+    'constant'    => 'formatConstantText',
     'function'    => 'formatSeeAlsoEntryText',
     'initializer' => 'formatInitializerText',
     'methodname'  => 'formatSeeAlsoEntryText',
@@ -436,6 +437,18 @@ abstract class Package_IDE_Base extends Format {
   //#endregion
 
   //#region Formatting (text)
+
+  public function formatConstantText($value, $tag) {
+    if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
+      return;
+    }
+    if (!$this->currentChunk['is_methodparam']) {
+      return;
+    }
+    // While inside a <methodparam>, constants should only occur in <initializer>
+    // elements because they can't be types or parameter names.
+    $this->currentChunk['param']['initializer'] = $value;
+  }
 
   public function formatInitializerText($value, $tag) {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
