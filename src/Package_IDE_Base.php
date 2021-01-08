@@ -57,6 +57,16 @@ abstract class Package_IDE_Base extends Format {
   // XML state.
 
   /**
+   * Determines if multiple signatures are present.
+   *
+   * By default, only the first signature is used. This is overridden if a
+   * <methodsynopsis> element has an explicit "procedural" attribute.
+   *
+   * @var bool $hasMethodSynopsis
+   */
+  protected $hasMethodSynopsis = FALSE;
+
+  /**
    * Determines if this is the function reference section of the manual. If
    * `FALSE`, the formatter will encounter non-function entries such as built-in
    * classes, INI settings, and superglobals.
@@ -325,7 +335,9 @@ abstract class Package_IDE_Base extends Format {
           : FALSE,
         'variadic' => $this->currentChunk['param']['variadic'],
       ];
-      $this->currentFunction['params'][$param['name']] = $param;
+      if (!$this->hasMethodSynopsis) {
+        $this->currentFunction['params'][$param['name']] = $param;
+      }
 
       // Reset.
       $this->currentChunk['is_methodparam'] = FALSE;
@@ -345,6 +357,17 @@ abstract class Package_IDE_Base extends Format {
       return;
     }
     $this->currentChunk['is_methodsynopsis'] = $open;
+    if (!$open) {
+      $this->hasMethodSynopsis = TRUE;
+    }
+    else {
+      if (isset($attrs[Reader::XMLNS_DOCBOOK]['role']) && $attrs[Reader::XMLNS_DOCBOOK]['role'] == 'procedural') {
+        $this->hasMethodSynopsis = FALSE;
+        $this->currentFunction['params'] = [];
+        $this->currentFunction['return']['type'] = [];
+        $this->currentFunction['return']['description'] = NULL;
+      }
+    }
   }
 
   public function format_Notes($open, $name, $attrs, $props) {
@@ -360,6 +383,9 @@ abstract class Package_IDE_Base extends Format {
       return;
     }
     if ($open) {
+      // Reset XML state.
+      $this->hasMethodSynopsis = FALSE;
+
       // Reset all stored data.
       $this->currentChunk = [
         'funcnames' => [],
@@ -492,7 +518,7 @@ abstract class Package_IDE_Base extends Format {
       return;
     }
     if ($this->role == 'description') {
-      if (!$this->currentChunk['is_methodsynopsis']) {
+      if (!$this->currentChunk['is_methodsynopsis'] || $this->hasMethodSynopsis) {
         return;
       }
       if (!$this->currentChunk['is_methodparam']) {
