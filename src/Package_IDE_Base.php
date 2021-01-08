@@ -76,6 +76,20 @@ abstract class Package_IDE_Base extends Format {
   protected $isFunctionRefSet = FALSE;
 
   /**
+   * Determines if the formatter is inside a <methodparam> element.
+   *
+   * @var bool $isMethodParam
+   */
+  protected $isMethodParam = FALSE;
+
+  /**
+   * Determines if the formatter is inside a <methodsynopsis> element.
+   *
+   * @var bool $isMethodSynopsis
+   */
+  protected $isMethodSynopsis = FALSE;
+
+  /**
    * Determines if the current chunk is in a whitelisted book.
    *
    * @var bool $isWhitelisted
@@ -96,8 +110,6 @@ abstract class Package_IDE_Base extends Format {
    */
   protected $currentChunk = [
     'funcnames' => [],
-    'is_methodparam'   => FALSE,
-    'is_methodsynopsis' => FALSE,
     'param' => [
       'name'        => FALSE,
       'type'        => [],
@@ -306,17 +318,14 @@ abstract class Package_IDE_Base extends Format {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted || $this->role != 'description') {
       return;
     }
+    $this->isMethodParam = $open;
     if ($open) {
-      // Indicate that future initializers belong to this parameter.
-      $this->currentChunk['is_methodparam'] = TRUE;
-
       if (isset($attrs[Reader::XMLNS_DOCBOOK]['choice']) && $attrs[Reader::XMLNS_DOCBOOK]['choice'] == 'opt') {
         $this->currentChunk['param']['optional'] = TRUE;
       }
       else {
         $this->currentChunk['param']['optional'] = FALSE;
       }
-
       if (isset($attrs[Reader::XMLNS_DOCBOOK]['rep']) && $attrs[Reader::XMLNS_DOCBOOK]['rep'] == 'repeat') {
         $this->currentChunk['param']['variadic'] = TRUE;
       }
@@ -335,12 +344,11 @@ abstract class Package_IDE_Base extends Format {
           : FALSE,
         'variadic' => $this->currentChunk['param']['variadic'],
       ];
+      // Ignore the parameter if there was already a method synopsis.
       if (!$this->hasMethodSynopsis) {
         $this->currentFunction['params'][$param['name']] = $param;
       }
-
       // Reset.
-      $this->currentChunk['is_methodparam'] = FALSE;
       $this->currentChunk['param'] = [
         'name'        => FALSE,
         'type'        => [],
@@ -356,7 +364,7 @@ abstract class Package_IDE_Base extends Format {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted || $this->role != 'description') {
       return;
     }
-    $this->currentChunk['is_methodsynopsis'] = $open;
+    $this->isMethodSynopsis = $open;
     if (!$open) {
       $this->hasMethodSynopsis = TRUE;
     }
@@ -385,12 +393,12 @@ abstract class Package_IDE_Base extends Format {
     if ($open) {
       // Reset XML state.
       $this->hasMethodSynopsis = FALSE;
+      $this->isMethodParam = FALSE;
+      $this->isMethodSynopsis = FALSE;
 
       // Reset all stored data.
       $this->currentChunk = [
         'funcnames' => [],
-        'is_methodparam'   => FALSE,
-        'is_methodsynopsis' => FALSE,
         'param' => [
           'name'        => FALSE,
           'type'        => [],
@@ -468,7 +476,7 @@ abstract class Package_IDE_Base extends Format {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
       return;
     }
-    if (!$this->currentChunk['is_methodparam']) {
+    if (!$this->isMethodParam) {
       return;
     }
     // While inside a <methodparam>, constants should only occur in <initializer>
@@ -480,7 +488,7 @@ abstract class Package_IDE_Base extends Format {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
       return;
     }
-    if (!$this->currentChunk['is_methodparam']) {
+    if (!$this->isMethodParam) {
       return;
     }
     $this->currentChunk['param']['initializer'] = $value;
@@ -490,7 +498,7 @@ abstract class Package_IDE_Base extends Format {
     if (!$this->isFunctionRefSet || !$this->isWhitelisted) {
       return;
     }
-    if ($this->currentChunk['is_methodparam']) {
+    if ($this->isMethodParam) {
       $this->currentChunk['param']['name'] = $value;
     }
     // if ($this->role == 'parameters') {
@@ -518,10 +526,10 @@ abstract class Package_IDE_Base extends Format {
       return;
     }
     if ($this->role == 'description') {
-      if (!$this->currentChunk['is_methodsynopsis'] || $this->hasMethodSynopsis) {
+      if (!$this->isMethodSynopsis || $this->hasMethodSynopsis) {
         return;
       }
-      if (!$this->currentChunk['is_methodparam']) {
+      if (!$this->isMethodParam) {
         $this->currentFunction['return']['type'][] = $value;
       }
       else {
